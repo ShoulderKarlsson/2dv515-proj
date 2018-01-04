@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Recommender {
     HashMap<String, User> db = new HashMap<>();
@@ -65,10 +66,38 @@ public class Recommender {
             res.add(new Result(otherUser.getUsername(), calc_Euclidian(otherUser, user)));
         }
 
-        System.out.println(res);
+        HashMap<String, User> n_recs = new HashMap<>();
+        Iterator<User> it =  db.values().iterator();
+
+        while(it.hasNext()) {
+            User usr = it.next();
+
+            for (Rating r : usr.ratings) {
+                String item = r.movie;
+                double score = r.score;
+
+                if (!n_recs.containsKey(item)) {
+                    n_recs.put(item, new User(item));
+                }
+
+                User n_usr = n_recs.get(item);
+                n_usr.addRating(new Rating(usr.getUsername() + "sdf", score));
+            }
+        }
+
+        ArrayList<Result> itemRes = new ArrayList<>();
+        for (String k : n_recs.keySet()) {
+            User movieUser = n_recs.get(k);
+
+            itemRes.add(new Result(movieUser.getUsername(), calc_Euclidian(movieUser, user)));
+
+        }
+
+        System.out.println(itemRes);
 
         return null;
     }
+
 
     private double calc_Euclidian(User A, User B) {
         double sim = 0.0;
