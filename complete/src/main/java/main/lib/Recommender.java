@@ -1,13 +1,11 @@
 package main.lib;
 
 import org.springframework.util.ResourceUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Recommender {
     HashMap<String, User> db = new HashMap<>();
@@ -63,39 +61,92 @@ public class Recommender {
             if (db.get(k).getUsername().equals(user.getUsername())) continue;
 
             User otherUser = db.get(k);
-            res.add(new Result(otherUser.getUsername(), calc_Euclidian(otherUser, user)));
+            res.add(new Result(otherUser, calc_Euclidian(otherUser, user)));
         }
 
-        HashMap<String, User> n_recs = new HashMap<>();
-        Iterator<User> it =  db.values().iterator();
+        getWeightedScores(res);
 
-        while(it.hasNext()) {
-            User usr = it.next();
 
-            for (Rating r : usr.ratings) {
-                String item = r.movie;
-                double score = r.score;
-
-                if (!n_recs.containsKey(item)) {
-                    n_recs.put(item, new User(item));
-                }
-
-                User n_usr = n_recs.get(item);
-                n_usr.addRating(new Rating(usr.getUsername() + "sdf", score));
-            }
-        }
-
-        ArrayList<Result> itemRes = new ArrayList<>();
-        for (String k : n_recs.keySet()) {
-            User movieUser = n_recs.get(k);
-
-            itemRes.add(new Result(movieUser.getUsername(), calc_Euclidian(movieUser, user)));
-
-        }
-
-        System.out.println(itemRes);
+//        HashMap<String, User> n_recs = new HashMap<>();
+//        Iterator<User> it =  db.values().iterator();
+//
+//        while(it.hasNext()) {
+//            User usr = it.next();
+//
+//            for (Rating r : usr.ratings) {
+//                String item = r.movie;
+//                double score = r.score;
+//
+//                if (!n_recs.containsKey(item)) {
+//                    n_recs.put(item, new User(item));
+//                }
+//
+//                User n_usr = n_recs.get(item);
+//                n_usr.addRating(new Rating(usr.getUsername() + "sdf", score));
+//            }
+//        }
+//
+//        ArrayList<Result> itemRes = new ArrayList<>();
+//        for (String k : n_recs.keySet()) {
+//            User movieUser = n_recs.get(k);
+//
+//            itemRes.add(new Result(movieUser.getUsername(), calc_Euclidian(movieUser, user)));
+//
+//        }
+//
+//        System.out.println(itemRes);
 
         return null;
+    }
+
+    /**
+     * Calculates each users weighted score for all the movies that the specific user has watched
+     */
+    void getWeightedScores(ArrayList<Result> results) {
+
+        // Key - A user
+        // List with KeyValue pair of a Movie and the weightedscore for that movie for the specific user
+//        HashMap<User, ArrayList<HashMap<String, Double>>> weightedScores = new HashMap<>();
+//        for (Result r : results) {
+//            ArrayList<HashMap<String, Double>> scores = new ArrayList<>();
+//            for (Rating rating : r.user.ratings) {
+//                HashMap<String, Double> score = new HashMap<>();
+//                score.put(rating.movie, r.simScore * rating.score);
+//                scores.add(score);
+//            }
+//
+//            weightedScores.put(r.user, scores);
+//        }
+
+        HashMap<User, HashMap<String, Double>> weightedScores = new HashMap<>();
+        for (Result r : results) {
+            HashMap<String, Double> scores = new HashMap<>();
+            for (Rating rating : r.user.ratings) {
+                scores.put(rating.movie, r.simScore * rating.score);
+            }
+
+            weightedScores.put(r.user, scores);
+        }
+
+        // TODO - Move this method call since this method should return the weighted scores..
+        calculateSumSim(weightedScores);
+    }
+
+    void calculateSumSim(HashMap<User, HashMap<String, Double>> scores) {
+        HashMap<String, Double> movieSumSimScores = new HashMap<>();
+        for (int movieId : movies.keySet()) {
+            String movieName = movies.get(movieId);
+            double movieSumSimScore = 0.0;
+            for (User u : scores.keySet()) {
+                HashMap<String, Double> userScores = scores.get(u);
+                if (userScores.containsKey(movieName)) {
+                    movieSumSimScore += userScores.get(movieName);
+                }
+            }
+            movieSumSimScores.put(movieName, movieSumSimScore);
+        }
+
+        System.out.println(movieSumSimScores);
     }
 
 

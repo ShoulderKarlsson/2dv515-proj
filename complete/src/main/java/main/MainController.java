@@ -4,13 +4,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
 
-import ch.qos.logback.core.recovery.RecoveryCoordinator;
 import main.lib.Recommender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MainController {
-
     HashSet<String> users = null;
 
     @RequestMapping("/users")
@@ -26,9 +24,7 @@ public class MainController {
             generateUsers();
         }
 
-
         if (!user.contains(user)) { return; }
-
 
         Recommender r = new Recommender();
         Object something = r.getRecomendationFor(user);
