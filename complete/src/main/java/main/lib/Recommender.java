@@ -64,7 +64,9 @@ public class Recommender {
             res.add(new Result(otherUser, calc_Euclidian(otherUser, user)));
         }
 
-        getWeightedScores(res);
+        // Each users weighted scores for each movie that they have rated.
+        HashMap<User, HashMap<String, Double>> userWeightedScores = getWeightedScores(res);
+        HashMap<String, Double> movieTotalWeightedScore = getMovieTotalScore(userWeightedScores);
 
 
 //        HashMap<String, User> n_recs = new HashMap<>();
@@ -99,25 +101,31 @@ public class Recommender {
         return null;
     }
 
+    private HashMap<String, Double> getMovieTotalScore(HashMap<User, HashMap<String, Double>> userWeightedScores) {
+        HashMap<String, Double> movieTotalScore = new HashMap<>();
+        for (User u : userWeightedScores.keySet()) {
+            HashMap<String, Double> userScores = userWeightedScores.get(u);
+            for (String movieName : userScores.keySet()) {
+                double movieScore = userScores.get(movieName);
+                if (movieTotalScore.containsKey(movieName)) {
+                    movieTotalScore.replace(movieName, movieTotalScore.get(movieName) + movieScore);
+                } else {
+                    movieTotalScore.put(movieName, movieScore);
+                }
+            }
+        }
+
+        return movieTotalScore;
+    }
+
+
     /**
      * Calculates each users weighted score for all the movies that the specific user has watched
      */
-    void getWeightedScores(ArrayList<Result> results) {
+    HashMap<User, HashMap<String, Double>> getWeightedScores(ArrayList<Result> results) {
 
         // Key - A user
-        // List with KeyValue pair of a Movie and the weightedscore for that movie for the specific user
-//        HashMap<User, ArrayList<HashMap<String, Double>>> weightedScores = new HashMap<>();
-//        for (Result r : results) {
-//            ArrayList<HashMap<String, Double>> scores = new ArrayList<>();
-//            for (Rating rating : r.user.ratings) {
-//                HashMap<String, Double> score = new HashMap<>();
-//                score.put(rating.movie, r.simScore * rating.score);
-//                scores.add(score);
-//            }
-//
-//            weightedScores.put(r.user, scores);
-//        }
-
+        // Hashmap with weighted scores for each movie for the specific user
         HashMap<User, HashMap<String, Double>> weightedScores = new HashMap<>();
         for (Result r : results) {
             HashMap<String, Double> scores = new HashMap<>();
@@ -128,8 +136,7 @@ public class Recommender {
             weightedScores.put(r.user, scores);
         }
 
-        // TODO - Move this method call since this method should return the weighted scores..
-        calculateSumSim(weightedScores);
+        return weightedScores;
     }
 
     void calculateSumSim(HashMap<User, HashMap<String, Double>> scores) {
@@ -147,6 +154,8 @@ public class Recommender {
         }
 
         System.out.println(movieSumSimScores);
+
+
     }
 
 
