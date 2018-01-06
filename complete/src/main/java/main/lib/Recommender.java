@@ -68,6 +68,12 @@ public class Recommender {
         HashMap<User, HashMap<String, Double>> userWeightedScores = getWeightedScores(res);
         HashMap<String, Double> movieTotalWeightedScore = getMovieTotalScore(userWeightedScores);
 
+        /**
+         * What works?
+         * I can calculate the total weighted score of a movie
+         * I can calculate each users specific weighted score for all movies rated
+         * I can caluclate the sum of all similiarities for a movie
+         */
 
 //        HashMap<String, User> n_recs = new HashMap<>();
 //        Iterator<User> it =  db.values().iterator();
