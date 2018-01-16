@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class MainController {
     HashSet<String> users = null;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping("/users")
     @ResponseBody
     public HashSet<String> getUsers() {
@@ -21,6 +22,7 @@ public class MainController {
         return users;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/rec/{user}")
     public HashMap<String, HashMap<String, Double>> getRec(@PathVariable String user) {
         if (users == null || users.size() == 0) {
@@ -38,7 +40,7 @@ public class MainController {
     private void generateUsers() {
         users = new HashSet<>();
         try {
-            File ratings = ResourceUtils.getFile("classpath:ratings.csv");
+            File ratings = ResourceUtils.getFile("classpath:x_ratings.csv");
 
             Files.lines(ratings.toPath())
                     .skip(1)
