@@ -88,6 +88,24 @@ public class Recommender {
         }
 
 
+        // Contains the total amount of weigthedscores from all users
+        // that has rated the current movie.
+        // (Total in the table)
+        HashMap<String, Double> totalWeightedScoreForEachMovie = new HashMap<>();
+        for (int movieId : movies.keySet()) {
+            String movieName = movies.get(movieId);
+            double movieScore = 0.0;
+            for (String username : userWightedScorePerMovie.keySet()) {
+                HashMap<String, Double> userWeightedScores = userWightedScorePerMovie.get(username);
+                movieScore += userWeightedScores.get(movieName);
+            }
+
+            totalWeightedScoreForEachMovie.put(movieName, movieScore);
+        }
+
+
+        System.out.println(5);
+
 
 //        /**
 //         * This contains the wheightedscore for each of the users.
