@@ -3,6 +3,7 @@ package main;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +19,14 @@ public class MainController {
     @RequestMapping("/users")
     @ResponseBody
     public HashSet<String> getUsers() {
-        if (users == null) { generateUsers(); }
+        if (users == null) {
+            generateUsers();
+        }
         return users;
     }
 
     @RequestMapping(value = "/rec/{user}")
-    public List<Something> getRec(@PathVariable String user) {
+    public HashMap<String, HashMap<String, Double>> getRec(@PathVariable String user) {
         if (users == null || users.size() == 0) {
             generateUsers();
         }
@@ -33,8 +36,7 @@ public class MainController {
         }
 
         Recommender r = new Recommender();
-        ArrayList<Something> something = (ArrayList<Something>) r.getRecomendationFor(user);
-//        return something.stream().limit(50).collect(Collectors.toList());
+        HashMap<String, HashMap<String, Double>> something = r.getRecomendationFor(user);
         return something;
     }
 

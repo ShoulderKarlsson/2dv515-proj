@@ -5,6 +5,7 @@ import org.springframework.util.ResourceUtils;
 import javax.swing.text.AbstractDocument;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class Recommender {
         }
     }
 
-    public ArrayList<Something> getRecomendationFor(String name) {
+    public HashMap<String, HashMap<String, Double>> getRecomendationFor(String name) {
         User user = db.get(name);
         ArrayList<Result> similarityScores = new ArrayList<>();
         for (String k : db.keySet()) {
@@ -73,9 +74,18 @@ public class Recommender {
             similarityScores.add(new Result(otherUser, _calc_Euclidian(otherUser, user)));
         }
 
-        // This contains the weightedscores for a user per movie
-        // this is calculated with the help of similarity.
-        // movierating * similarity score = weighted score
+        /**
+         * This contains the weightedscores for a user per movie
+         * this is calculated with the help of similarity.
+         * movierating * similarity score = weighted score
+         *
+         * HashMap
+         *  String => Name of a user
+         *  HashMap<String, Double>
+         *      String => Name of a movie
+         *      Double => weightedscore for that movie for the specific user
+         */
+
         HashMap<String, HashMap<String, Double>> userWightedScorePerMovie = new HashMap<>();
         for (Result r : similarityScores) {
             HashMap<String, Double> movieScore = new HashMap<>();
@@ -104,8 +114,54 @@ public class Recommender {
         }
 
 
-        System.out.println(5);
+        /**
+         * Calculates the total similarity score for each user
+         * HashMap:
+         *  String => Name of a movie
+         *  Double => The sum of all similarities
+         */
+        HashMap<String, Double> sumSims = new HashMap<>();
+        for (int movieId : movies.keySet()) {
+            double totalSim = 0.0;
+            for (String username : userWightedScorePerMovie.keySet()) {
+                HashMap<String, Double> userWeightedScores = userWightedScorePerMovie.get(username);
+                // If the weighted score is not 0 on the movie, add it to total
+                if (userWeightedScores.get(movies.get(movieId)) != 0) {
+                    for (Result r : similarityScores) {
+                        if (r.user.getUsername().equals(username)) {
+                            totalSim += r.simScore;
+                        }
+                    }
+                }
+            }
 
+            sumSims.put(movies.get(movieId), totalSim);
+        }
+
+
+        /**
+         * Total / sim_sum
+         *
+         * HashMap<String, Double>
+         *     String => Moviename
+         *     Double => Total divided by sum_sim
+         */
+
+        HashMap<String, Double> totalSimSum = new HashMap<>();
+        sumSims.forEach((key, value) -> {
+            double total = totalWeightedScoreForEachMovie.get(key);
+            totalSimSum.put(key, total / value);
+        });
+
+        HashMap<String, HashMap<String, Double>> result = new HashMap<>();
+        HashMap<String, Double> userSims = new HashMap<>();
+        for (Result r : similarityScores) {
+            userSims.put(r.user.getUsername(), r.simScore);
+        }
+        result.put("userRecs", userSims);
+        result.put("movieRecs", totalSimSum);
+
+        return result;
 
 //        /**
 //         * This contains the wheightedscore for each of the users.
@@ -214,8 +270,6 @@ public class Recommender {
 
 //        Collections.sort(movieRecs);
 //        return movieRecs;
-
-        return null;
     }
 
     private double _calc_Euclidian(User A, User B) {
