@@ -7,42 +7,49 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Filehandler {
 
+    public static HashMap<String, User> generateUsers(HashMap<Integer, String> movies) throws IOException {
+        File ratings = ResourceUtils.getFile("classpath:x_ratings.csv");
+        HashMap<String, User> userMap = new HashMap<>();
+        Files.lines(ratings.toPath())
+                .skip(1)
+                .map(line -> line.split(","))
+                .forEach(info -> {
+                    int userId = Integer.parseInt(info[0]);
+                    int movieId = Integer.parseInt(info[1]);
+                    double rating = Double.parseDouble(info[2]);
 
-//    public ArrayList<Rating> getRatingsContent() {
-//        ArrayList<Rating> ratings = new ArrayList<>();
-//        try {
-//            File r = ResourceUtils.getFile("classpath:ratings.csv");
-//            Files.lines(r.toPath())
-//                    .skip(1)
-//                    .map(line -> line.split(","))
-//                    .forEach(ratingInfo -> {
-//                        int userId = 0;
-//                        String movie = 0;
-//                        double score = 0;
-//                    });
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        return ratings;
-//    }
-//
-//    public static String[] getMoviesContent() {
-//        try {
-//            File movies = ResourceUtils.getFile("classpath:movies.csv");
-////
-////            Files.lines(movies.toPath())
-////                    .
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+                    User u = null;
+                    if (userMap.containsKey("User" + userId)) {
+                        u = userMap.get("User" + userId);
+                    } else {
+                        u = new User("User" + userId);
+                        userMap.put("User" + userId, u);
+                    }
+
+                    // Adding ratings and movies into hashmap
+                    u.add_rating(movies.get(movieId), rating);
+                });
+
+        return userMap;
+    }
+
+    public static HashMap<Integer, String> generateMovies() throws IOException {
+        File movies = ResourceUtils.getFile("classpath:x_movies.csv");
+        HashMap<Integer, String> movieMap = new HashMap<>();
+        Files.lines(movies.toPath())
+                .skip(1)
+                .map(line -> line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"))
+                .forEach(movie -> {
+                    int movieId = Integer.parseInt(movie[0]);
+                    String movieName = movie[1];
+                    movieMap.put(movieId, movieName);
+                });
+
+
+        return movieMap;
+    }
 }

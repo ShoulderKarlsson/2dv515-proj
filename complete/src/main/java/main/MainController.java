@@ -1,15 +1,11 @@
 package main;
 
+import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import main.lib.Recommender;
-import main.lib.Something;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,14 +32,15 @@ public class MainController {
         }
 
         Recommender r = new Recommender();
-        HashMap<String, HashMap<String, Double>> something = r.getRecomendationFor(user);
-        return something;
+        return r.getRecomendationFor(user);
     }
 
     private void generateUsers() {
         users = new HashSet<>();
         try {
-            Files.lines(Paths.get("/home/shoulder/Documents/school/ai-2dv515/spring-template/complete/src/main/resources/x_ratings.csv"))
+            File ratings = ResourceUtils.getFile("classpath:ratings.csv");
+
+            Files.lines(ratings.toPath())
                     .skip(1)
                     .forEach(line -> users.add("User" + line.split(",")[0]));
         } catch (Exception e) {
