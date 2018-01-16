@@ -8,7 +8,9 @@ class Rating {
         this.movie = movie;
         this.score = score;
     }
-    public boolean matches(Rating bRating) {
-        return this.movie.equals(bRating.movie);
+
+
+    public boolean matches(Rating r) {
+        return r.movie.equals(this.movie);
     }
 }

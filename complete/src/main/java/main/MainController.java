@@ -34,13 +34,14 @@ public class MainController {
 
         Recommender r = new Recommender();
         ArrayList<Something> something = (ArrayList<Something>) r.getRecomendationFor(user);
-        return something.stream().limit(300).collect(Collectors.toList());
+//        return something.stream().limit(50).collect(Collectors.toList());
+        return something;
     }
 
     private void generateUsers() {
         users = new HashSet<>();
         try {
-            Files.lines(Paths.get("/home/shoulder/Documents/school/ai-2dv515/spring-template/complete/src/main/resources/ratings.csv"))
+            Files.lines(Paths.get("/home/shoulder/Documents/school/ai-2dv515/spring-template/complete/src/main/resources/x_ratings.csv"))
                     .skip(1)
                     .forEach(line -> users.add("User" + line.split(",")[0]));
         } catch (Exception e) {
