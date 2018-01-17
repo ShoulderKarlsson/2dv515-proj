@@ -4,23 +4,7 @@ import {Container} from './container'
 import {Header} from '../components/header'
 import {Text} from '../components/text'
 import styled from 'styled-components'
-import {keyframes} from 'styled-components'
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-`
-
-export const AnimatedText = styled(Text)`
-  animation: ${fadeIn};
-  animation-duration: 500ms;
-  animation-timing-function: ease-out;
-`
+import {AnimatedText} from '../components/animated-text'
 
 const NoScrollbarsDiv = styled.div`
   ::-webkit-scrollbar {

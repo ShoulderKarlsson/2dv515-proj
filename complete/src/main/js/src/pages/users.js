@@ -5,7 +5,8 @@ import {Header} from '../components/header'
 import {Container} from '../components/container'
 import {Text} from '../components/text'
 import {Link} from 'react-router-dom'
-import {AnimatedText} from '../components/pagination-list'
+import {AnimatedText} from '../components/animated-text'
+
 const enhance = compose(
   withFetch({
     url: 'http://localhost:8080/users',
