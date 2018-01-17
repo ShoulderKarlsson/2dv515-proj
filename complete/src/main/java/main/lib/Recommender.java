@@ -100,15 +100,21 @@ public class Recommender {
 
         HashMap<String, Double> totalSimSum = new HashMap<>();
         sumSims.forEach((key, value) -> {
-            double total = totalWeightedScoreForEachMovie.get(key);
-            totalSimSum.put(key, total / value);
+            if (totalSimSum.size() < 100) {
+                double total = totalWeightedScoreForEachMovie.get(key);
+                totalSimSum.put(key, total / value);
+            }
         });
 
 
         HashMap<String, HashMap<String, Double>> result = new HashMap<>();
         HashMap<String, Double> userSims = new HashMap<>();
         for (Result r : similarityScores) {
-            userSims.put(r.user.getUsername(), r.simScore);
+            if (userSims.size() < 100) {
+                userSims.put(r.user.getUsername(), r.simScore);
+            } else {
+                break;
+            }
         }
         result.put("userRecs", userSims);
         result.put("movieRecs", totalSimSum);

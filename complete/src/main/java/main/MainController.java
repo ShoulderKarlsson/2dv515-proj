@@ -40,7 +40,7 @@ public class MainController {
     private void generateUsers() {
         users = new HashSet<>();
         try {
-            File ratings = ResourceUtils.getFile("classpath:x_ratings.csv");
+            File ratings = ResourceUtils.getFile("classpath:ratings.csv");
 
             Files.lines(ratings.toPath())
                     .skip(1)

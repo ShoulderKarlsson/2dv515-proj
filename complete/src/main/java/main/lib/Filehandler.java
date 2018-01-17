@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Filehandler {
 
     public static HashMap<String, User> generateUsers(HashMap<Integer, String> movies) throws IOException {
-        File ratings = ResourceUtils.getFile("classpath:x_ratings.csv");
+        File ratings = ResourceUtils.getFile("classpath:ratings.csv");
         HashMap<String, User> userMap = new HashMap<>();
         Files.lines(ratings.toPath())
                 .skip(1)
@@ -38,7 +38,7 @@ public class Filehandler {
     }
 
     public static HashMap<Integer, String> generateMovies() throws IOException {
-        File movies = ResourceUtils.getFile("classpath:x_movies.csv");
+        File movies = ResourceUtils.getFile("classpath:movies.csv");
         HashMap<Integer, String> movieMap = new HashMap<>();
         Files.lines(movies.toPath())
                 .skip(1)
