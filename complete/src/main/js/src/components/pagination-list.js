@@ -6,7 +6,7 @@ import {Text} from '../components/text'
 import styled from 'styled-components'
 import {AnimatedText} from '../components/animated-text'
 
-const NoScrollbarsDiv = styled.div`
+export const NoScrollbarsDiv = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
@@ -42,8 +42,8 @@ const StatelessPaginationList = ({end, setEnd, data, text = '', ...props}) => {
           textAlign: 'center',
         }}
       >
-        {data.slice(0, end).map(({id, value}) => (
-          <AnimatedText>
+        {data.slice(0, end).map(({id, value}, i) => (
+          <AnimatedText key={i}>
             {id} - {value}
           </AnimatedText>
         ))}

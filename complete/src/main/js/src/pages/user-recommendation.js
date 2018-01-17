@@ -34,7 +34,6 @@ const StatelessUserRecommendation = ({movieRecs, userRecs, ...props}) => {
       width={'100vw'}
     >
       <Container
-        // backgroundColor={'orange'}
         backgroundColor={'rgb(250,250,250)'}
         style={{flexDirection: 'column'}}
         justify={'space-between'}

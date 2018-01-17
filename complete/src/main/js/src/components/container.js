@@ -10,5 +10,5 @@ export const Container = styled.div`
     props.backgroundColor ? props.backgroundColor : 'white'};
   margin-top: ${props => (props.marginTop ? props.marginTop : 'initial')};
   margin-bottom: ${props => (props.marginBottom ? props.marginTop : 'initial')};
-  overflow: ${props => props.overflow ? props.overflow : 'hidden'};
+  overflow: ${props => (props.overflow ? props.overflow : 'hidden')};
 `

@@ -6,7 +6,7 @@ import {Container} from '../components/container'
 import {Text} from '../components/text'
 import {Link} from 'react-router-dom'
 import {AnimatedText} from '../components/animated-text'
-
+import {NoScrollbarsDiv} from '../components/pagination-list'
 const enhance = compose(
   withFetch({
     url: 'http://localhost:8080/users',
@@ -20,39 +20,30 @@ const StatlessUsers = ({data}) => {
       width={'100vw'}
     >
       <Container
-        style={{flexDirection: 'column', overflowY: 'scroll'}}
-        justify="flex-start"
-        alignItems="initial"
         height={'80vh'}
-        width="80vw"
         backgroundColor={'rgb(250,250,250)'}
+        width={'80vw'}
+        justify={'flex-start'}
+        alignItems="initial"
+        style={{flexDirection: 'column'}}
       >
-        <Header>Users</Header>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <div style={{flex: 1}}>
+          <Header>Users</Header>
+        </div>
+        <NoScrollbarsDiv style={{flex: 10, overflowY: 'scroll'}}>
           {data.map((user, i) => {
             return (
-              <Container
-                key={i}
-                backgroundColor={'rgb(250,250,250)'}
-                justify="space-around"
-                style={{
-                  height: '50px',
-                  flexDirection: 'row',
-                }}
-              >
+              <div style={{display: 'flex', justifyContent: 'space-around'}} key={i}>
                 <AnimatedText>{user}</AnimatedText>
                 <Link style={{textDecoration: 'none'}} to={`user/${user}`}>
-                  <AnimatedText style={{color: 'rgb(120, 182, 202)'}}>View Recomendations</AnimatedText>
+                  <AnimatedText style={{color: 'rgb(120, 182, 202)'}}>
+                    View Recomendations
+                  </AnimatedText>
                 </Link>
-              </Container>
+              </div>
             )
           })}
-        </div>
+        </NoScrollbarsDiv>
       </Container>
     </Container>
   )

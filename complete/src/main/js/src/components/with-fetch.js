@@ -21,7 +21,10 @@ export const withFetch = ({
           return this.props.setIsLoading(false)
         }
 
-        const response = await get(url).catch(e => this.props.setError(e))
+        const response = await get(url).catch(e => {
+          console.log(e)
+          this.props.setError(e)
+        })
 
         this.props.setData(response)
         this.props.setIsLoading(false)
