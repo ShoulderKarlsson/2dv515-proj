@@ -5,7 +5,7 @@ import {Header} from '../components/header'
 import {Container} from '../components/container'
 import {Text} from '../components/text'
 import {Link} from 'react-router-dom'
-
+import {AnimatedText} from '../components/pagination-list'
 const enhance = compose(
   withFetch({
     url: 'http://localhost:8080/users',
@@ -43,9 +43,9 @@ const StatlessUsers = ({data}) => {
                   flexDirection: 'row',
                 }}
               >
-                <Text>{user}</Text>
+                <AnimatedText>{user}</AnimatedText>
                 <Link style={{textDecoration: 'none'}} to={`user/${user}`}>
-                  <Text style={{color: 'rgb(120, 182, 202)'}}>View Recomendations</Text>
+                  <AnimatedText style={{color: 'rgb(120, 182, 202)'}}>View Recomendations</AnimatedText>
                 </Link>
               </Container>
             )

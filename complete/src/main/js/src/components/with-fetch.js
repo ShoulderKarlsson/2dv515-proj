@@ -40,7 +40,7 @@ export const withFetch = ({
         // const response = await get(url)
         //   .catch(e => this.props.setError(e))
 
-        setTimeout(() => {
+        // setTimeout(() => {
           const response = [
             'User2',
             'User1',
@@ -51,7 +51,7 @@ export const withFetch = ({
           ]
           this.props.setData(response)
           this.props.setIsLoading(false)
-        }, 1000)
+        // }, 1000)
       },
     }),
   )
