@@ -23,10 +23,8 @@ export const withFetch = ({
 
         const response = await get(url).catch(e => this.props.setError(e))
 
-        setTimeout(() => {
-          this.props.setData(response)
-          this.props.setIsLoading(false)
-        }, 3000)
+        this.props.setData(response)
+        this.props.setIsLoading(false)
       },
     }),
   )
