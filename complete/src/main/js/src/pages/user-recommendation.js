@@ -16,48 +16,42 @@ const enhance = compose(
         return isNaN(object[curr])
           ? acc
           : [...acc, {id: curr, value: object[curr].toFixed(3)}]
-      }, [])
+      }, []).slice(0, 50).sort((a, b) => b.value - a.value)
 
     return {
       ...props,
-      movieRecs: transform(movieRecs).slice(0, 15).sort((a, b) => b.value - a.value),
-      userRecs: transform(userRecs).slice(0, 15).sort((a, b) => b.value - a.value)
+      movieRecs: transform(movieRecs),
+      userRecs: transform(userRecs)
     }
   }),
 )
 
-const StatelessUserRecommendation = ({movieRecs, userRecs, ...props}) => {
-  return (
+const StatelessUserRecommendation = ({movieRecs, userRecs, ...props}) => (
+  <Container
+    backgroundColor={'rgb(250,250,250)'}
+    height={'100vh'}
+    width={'100vw'}
+  >
     <Container
       backgroundColor={'rgb(250,250,250)'}
-      height={'100vh'}
-      width={'100vw'}
+      style={{flexDirection: 'column'}}
+      justify={'space-between'}
+      height={'80vh'}
+      width={'80vw'}
     >
-      <Container
-        backgroundColor={'rgb(250,250,250)'}
-        style={{flexDirection: 'column'}}
-        justify={'space-between'}
-        height={'80vh'}
-        width={'80vw'}
-      >
-        <div style={{height: '50px', width: '100%', alignSelf: 'flex-start'}}>
-          <Header>Recommendations</Header>
-        </div>
-        <div style={{display: 'flex', flex: 1, width: '100%'}}>
-          <PaginationList
-            text={'Movie Recommendations'}
-            end={2}
-            data={movieRecs}
-          />
-          <PaginationList
-            text={'User Recommendations'}
-            end={2}
-            data={userRecs}
-          />
-        </div>
-      </Container>
+      <div style={{height: '50px', width: '100%', alignSelf: 'flex-start'}}>
+        <Header>Recommendations</Header>
+      </div>
+      <div style={{display: 'flex', flex: 1, width: '100%'}}>
+        <PaginationList
+          text={'Movie Recommendations'}
+          end={2}
+          data={movieRecs}
+        />
+        <PaginationList text={'User Recommendations'} end={2} data={userRecs} />
+      </div>
     </Container>
-  )
-}
+  </Container>
+)
 
 export const UserRecommendation = enhance(StatelessUserRecommendation)
