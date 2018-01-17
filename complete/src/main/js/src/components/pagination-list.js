@@ -17,6 +17,7 @@ const StyledButton = styled.input`
   width: 30%;
   background: rgb(120, 182, 202);
   color: white;
+  margin-top: 4px;
 `
 
 const enhance = compose(withState('end', 'setEnd', ({end}) => (end ? end : 0)))
@@ -36,6 +37,7 @@ const StatelessPaginationList = ({end, setEnd, data, text = '', ...props}) => {
         style={{
           overflowY: 'scroll',
           minHeight: '70%',
+          maxHeight: '70%',
           width: '100%',
           textAlign: 'center',
         }}
@@ -47,7 +49,7 @@ const StatelessPaginationList = ({end, setEnd, data, text = '', ...props}) => {
         ))}
       </NoScrollbarsDiv>
       <StyledButton
-        value={'Load 5 more'}
+        value={end >= data.length ? 'Nothing more to load' : 'Load More'}
         type="button"
         onClick={() => {
           setEnd(end + 5)
