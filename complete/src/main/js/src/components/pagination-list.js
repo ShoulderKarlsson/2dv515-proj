@@ -1,8 +1,6 @@
 import * as React from 'react'
 import {compose, withState} from 'recompose'
-import {Container} from './container'
 import {Header} from '../components/header'
-import {Text} from '../components/text'
 import styled from 'styled-components'
 import {AnimatedText} from '../components/animated-text'
 
@@ -11,6 +9,7 @@ export const NoScrollbarsDiv = styled.div`
     display: none;
   }
 `
+
 const StyledButton = styled.input`
   border: none;
   padding: 16px;
@@ -49,6 +48,7 @@ const StatelessPaginationList = ({end, setEnd, data, text = '', ...props}) => {
         ))}
       </NoScrollbarsDiv>
       <StyledButton
+        style={{marginTop: 16}}
         value={end >= data.length ? 'Nothing more to load' : 'Load More'}
         type="button"
         onClick={() => {

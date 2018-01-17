@@ -3,10 +3,10 @@ import {withFetch} from '../components/with-fetch'
 import {compose} from 'recompose'
 import {Header} from '../components/header'
 import {Container} from '../components/container'
-import {Text} from '../components/text'
 import {Link} from 'react-router-dom'
 import {AnimatedText} from '../components/animated-text'
 import {NoScrollbarsDiv} from '../components/pagination-list'
+
 const enhance = compose(
   withFetch({
     url: 'http://localhost:8080/users',
