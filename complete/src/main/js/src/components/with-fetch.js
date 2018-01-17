@@ -23,7 +23,9 @@ export const withFetch = ({
 
         const response = await get(_url).catch(e => {
           console.log(e)
+          // Stops loading and render WrappedComponent if error occured
           this.props.setError(e)
+          this.props.isLoading(false)
         })
 
         this.props.setData(response)
@@ -32,7 +34,7 @@ export const withFetch = ({
     }),
   )
 
-  const WithFetch = enhance(({isLoading, data, ...withFetchProps}) => {
+  const WithFetch = enhance(({isLoading, data, error, ...withFetchProps}) => {
     return isLoading ? (
       <Fade
         style={{
@@ -47,7 +49,7 @@ export const withFetch = ({
       </Fade>
     ) : (
       <Fade>
-        <WrappedComponent data={data} {...withFetchProps} {...props} />
+        <WrappedComponent data={data} {...withFetchProps} {...props} error={error} />
       </Fade>
     )
   })
