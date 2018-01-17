@@ -20,7 +20,7 @@ const StatlessUsers = ({data}) => {
       width={'100vw'}
     >
       <Container
-        style={{flexDirection: 'column'}}
+        style={{flexDirection: 'column', overflowY: 'scroll'}}
         justify="flex-start"
         alignItems="initial"
         height={'80vh'}
@@ -41,6 +41,7 @@ const StatlessUsers = ({data}) => {
                 backgroundColor={'rgb(250,250,250)'}
                 justify="space-around"
                 style={{
+                  height: '50px',
                   flexDirection: 'row',
                 }}
               >

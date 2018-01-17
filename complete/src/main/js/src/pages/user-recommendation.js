@@ -12,15 +12,16 @@ const enhance = compose(
   }),
   mapProps(({data: {userRecs, movieRecs}, ...props}) => {
     const transform = object =>
-      Object.keys(object).reduce(
-        (acc, curr) => [...acc, {id: curr, value: object[curr].toFixed(3)}],
-        [],
-      )
+      Object.keys(object).reduce((acc, curr) => {
+        return isNaN(object[curr])
+          ? acc
+          : [...acc, {id: curr, value: object[curr].toFixed(3)}]
+      }, [])
 
     return {
       ...props,
-      movieRecs: transform(movieRecs).slice(0, 15),
-      userRecs: transform(userRecs).slice(0, 15),
+      movieRecs: transform(movieRecs).slice(0, 15).sort((a, b) => b.value - a.value),
+      userRecs: transform(userRecs).slice(0, 15).sort((a, b) => b.value - a.value)
     }
   }),
 )
@@ -40,18 +41,21 @@ const StatelessUserRecommendation = ({movieRecs, userRecs, ...props}) => {
         height={'80vh'}
         width={'80vw'}
       >
-      <div style={{height: '50px', width: '100%', alignSelf: 'flex-start'}}>
-      <Header>Recommendations</Header>
-      </div>
-      <div style={{display: 'flex', flex: 1, width: '100%'}}>
-         <PaginationList
-          text={'Movie Recommendations'}
-          end={2}
-          data={movieRecs}
-        />
-        <PaginationList text={'User Recommendations'} end={2} data={userRecs} />
-      </div>
-
+        <div style={{height: '50px', width: '100%', alignSelf: 'flex-start'}}>
+          <Header>Recommendations</Header>
+        </div>
+        <div style={{display: 'flex', flex: 1, width: '100%'}}>
+          <PaginationList
+            text={'Movie Recommendations'}
+            end={2}
+            data={movieRecs}
+          />
+          <PaginationList
+            text={'User Recommendations'}
+            end={2}
+            data={userRecs}
+          />
+        </div>
       </Container>
     </Container>
   )
