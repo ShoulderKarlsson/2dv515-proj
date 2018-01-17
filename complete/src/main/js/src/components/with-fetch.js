@@ -14,14 +14,14 @@ export const withFetch = ({
     withState('error', 'setError', null),
     lifecycle({
       async componentDidMount() {
-        if (typeof urlGenerator === 'function' && url === '') {
-          const url = urlGenerator(props)
-          const response = await get(url).catch(e => console.log)
-          this.props.setData(response)
-          return this.props.setIsLoading(false)
+        if (!url && typeof urlGenerator !== 'function') {
+          throw new Error('Must provide a URL or a URL generator function')
         }
 
-        const response = await get(url).catch(e => {
+        const _url =
+          typeof urlGenerator === 'function' ? urlGenerator(props) : url
+
+        const response = await get(_url).catch(e => {
           console.log(e)
           this.props.setError(e)
         })
@@ -47,7 +47,7 @@ export const withFetch = ({
       </Fade>
     ) : (
       <Fade>
-        <WrappedComponent data={data} {...withFetchProps} />
+        <WrappedComponent data={data} {...withFetchProps} {...props} />
       </Fade>
     )
   })
