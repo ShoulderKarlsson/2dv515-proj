@@ -3,6 +3,7 @@ import {compose, mapProps} from 'recompose'
 import {withFetch} from '../components/with-fetch'
 import {PaginationList} from '../components/pagination-list'
 import {Container} from '../components/container'
+import {Header} from '../components/header'
 
 const enhance = compose(
   withFetch({
@@ -32,19 +33,25 @@ const StatelessUserRecommendation = ({movieRecs, userRecs, ...props}) => {
       width={'100vw'}
     >
       <Container
-        // backgroundColor={'rgb(250,250,250)'}
-        backgroundColor={'orange'}
-        style={{flexDirection: 'row'}}
-        justify={'space-around'}
+        // backgroundColor={'orange'}
+        backgroundColor={'rgb(250,250,250)'}
+        style={{flexDirection: 'column'}}
+        justify={'space-between'}
         height={'80vh'}
         width={'80vw'}
       >
-        <PaginationList
+      <div style={{height: '50px', width: '100%', alignSelf: 'flex-start'}}>
+      <Header>Recommendations</Header>
+      </div>
+      <div style={{display: 'flex', flex: 1, width: '100%'}}>
+         <PaginationList
           text={'Movie Recommendations'}
           end={2}
           data={movieRecs}
         />
         <PaginationList text={'User Recommendations'} end={2} data={userRecs} />
+      </div>
+
       </Container>
     </Container>
   )
